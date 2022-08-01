@@ -128,7 +128,7 @@ The website has been created using the python framework [Django](https://www.dja
 This Django application has been deployed on a Linux server running Apache.
 
 ### Main page
-< Insert manpage image>
+![Main page image](https://github.com/Hexadecilab/TwitchProfiler/blob/main/images/website_mainpage.png?raw=true)
 The main page is composed of 5 panels:
  - Show the global sanity of the database.
  - Show the number of user tracked the last day.
