@@ -71,6 +71,8 @@ graph TD;
     C4[Viewer3] --> AAAa3{...}
 ```
 
+Each day a tracked user is randomly selected and his day activity is saved into the database for verification purpose.
+
 Using this data structure, it is possible to profile user along in a day. If resturing the data is a simple trivial algorithm the real problem was to make it run on my computer. As the whole daily data has to be loaded in RAM by Python to associate it, this has limited the total number of streamer tracked in a day. 
 
 With only the top 100 french streamer tracked, a day of information is taking more than 10GB of RAM to restructurate. Another problem is to then embed the useful data in an understable format for the database which increased the RAM usage too. As the database is hosted on my personnal computer for cost and performances reason, the database performances has to be taken into account when writing to it daily.
@@ -116,3 +118,51 @@ As the processing are independant it is possible to parralelise this task. With 
 The time needed to statisticly pass through the entire database can be calculated using [the answer to the Coupon collector problem](https://en.wikipedia.org/wiki/Coupon_collector%27s_problem#Calculating_the_expectation) which tell that the complexity of such systems is proportional to nlog(n) where n is the number of different document to go through (in my case 5.6M). Accordingto this solution, I should process 37.7M documents. This represent 26 hours of processing. 
 
 To deploy this system into production it would be necessary to use a more powerfull device, or to accept to have a maximum lag of 1 day on the post processing data and process the data each day for 13 hours.
+
+### Verification
+To verify the sanity of the database, I check that the selectionned user and user information stored in the part day processing correspond to the one in the database. If so, the database is correct.
+
+## Website
+The website has been created using the python framework [Django](https://www.djangoproject.com/). The design is based on the [Appseed UI kit](https://appseed.us/) even though some module and panels has been created by myself for the specific purpose of the application.
+This Django application has been deployed on a linux server running Apache.
+
+### Main page
+< Insert manpage image>
+The mainpage is composed of 5 panels:
+ - Show the global sanity of the database.
+ - Show the number of user tracked the last day.
+ - The graphical representation of the evolution of the number of daily user tracked.
+ - The graphical representation of the sanity status of the database.
+ - The graphical representation of the time taken for the day processing step.
+### User page
+< Insert user image>
+The useris composed of 7 panels:
+ - Show the name of the user and the last date where the data where analysed.
+ - Show the recent favorite streamers.
+ - Show the recent favorite games.
+ - Show the all time favorite streamers.
+ - Show the all time favorite games.
+ - Show the local workday and weekend schedule.
+ - Show the watchtime heatmap of the user (the greener the more time watched).
+ - Show the day schedule of the user for the selectionned day (for debug purposes).
+## Conclusion
+Working on this project taught me lots of differents skills such as:
+ - Designing efficient datastructure
+ - Working with daily database verification system
+ - Optimisation of process to reduce bottlenecks
+ - Maintaining MongoDB databases
+ - Developping an application using Django
+ - Improving my front end developpement skills
+ - Deploying a Django app on Apache
+ - Scheduling tasks on Linux/Windows
+ - Improving my GDPR knowledge
+
+Multiples extention of this project comes into my mind:
+
+ - Developping a machine learning algorithm to predict if an user will watch a stream of a certain streamer, playing a certain game at a certain moment.
+ - Using the stream title data (with a text recognition system ?) to improve the created AI model
+ - Create a streamer side for my website summarizing the anonimized data of the viewers with possibility of prediction.
+
+Sadly using this product for more then a small project seems complicated regarding the GDPR law. 
+
+Thomas Bolteau - Hexadecilab @ 2022
