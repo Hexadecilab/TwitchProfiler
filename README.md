@@ -76,3 +76,43 @@ Using this data structure, it is possible to profile user along in a day. If res
 With only the top 100 french streamer tracked, a day of information is taking more than 10GB of RAM to restructurate. Another problem is to then embed the useful data in an understable format for the database which increased the RAM usage too. As the database is hosted on my personnal computer for cost and performances reason, the database performances has to be taken into account when writing to it daily.
 
 I choosed to use MONGO DB for being able to use the viewer name as index, and the simplicity as every document in the pipline was already in a JSON format.
+
+It is possible to see on the website (cf. abstract) statistics about the daily processing such as the time taken and the daily user tracked.
+
+### Viewer Analyser
+
+After the day added to the database, it is possible deduce useful information from the collected data in prevision to further data processing (such as behavior prediction model). 
+The actual state of the data processing calculate two categories of informations:
+
+ - All time
+ - Local
+ 
+ **Local workday schedule**
+Using an 20-day exponential moving average, in is possible to calculate the hour in the day when the viewer use twitch. The data can be interpreted as the potential disponibility (in minutes) of the viewer at this hour.
+
+ **Local weekend schedule**
+Using an 8-day exponential moving average, in is possible to calculate the hour in the day when the viewer use twitch. The data can be interpreted as the potential disponibility (in minutes) of the viewer at this hour.
+
+**All Time favorite streamer**
+This information is for the choosen viewer, the total watched time for every streamer he ever watched.
+
+**All Time favorite game**
+This information is for the choosen viewer, the total watched time for every game he ever watched.
+
+**Recent favorite streamer**
+This information is for the choosen viewer, the score of this viewer regarding this streamer for every streamer he watched on the last 4 weeks range. The score is calculated on the time spent looking at a stream using the exponential moving average on 28 days.
+
+**Recent faviorite game**
+Same as Recent faviorite streamer but for games.
+
+**Viewer analysis**
+Some of the viewer has suspicious behavior (such as watching tenth of different streamer at the same time). As they are probably bots and increase artificialy the size of the database, a ban list has been created to remove the data of thoses users.
+
+This part of the toolchain is the most expensive to execute by far. If as the previous post processing data are stored it is possible to reduce the amount of calculation if the whole database if often browsed, it is not enough for my computer.
+The process fetch a random user in the database as they are not sorted (this is the downside of NoSQL database). And then process the data. If the user has already been processed for the day, the processing will not been done again thus saving processing time.
+
+As the processing are independant it is possible to parralelise this task. With 4 concurrent task, python use approximatly 6GB of RAM, and MongoDB 4GB. The RAM is one of the bottleneck of this task as adding a 5th worker slow down the global process. Another bottleneck is the disk speed reading and latency.  With those caracteristics I process ~400 users per seconds. 
+
+The time needed to statisticly pass through the entire database can be calculated using [the answer to the Coupon collector problem](https://en.wikipedia.org/wiki/Coupon_collector%27s_problem#Calculating_the_expectation) which tell that the complexity of such systems is proportional to nlog(n) where n is the number of different document to go through (in my case 5.6M). Accordingto this solution, I should process 37.7M documents. This represent 26 hours of processing. 
+
+To deploy this system into production it would be necessary to use a more powerfull device, or to accept to have a maximum lag of 1 day on the post processing data and process the data each day for 13 hours.
