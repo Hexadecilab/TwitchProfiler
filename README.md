@@ -136,7 +136,7 @@ The main page is composed of 5 panels:
  - The graphical representation of the sanity status of the database.
  - The graphical representation of the time taken for the day processing step.
 ### User page
-< Insert user image>
+![User page image](https://github.com/Hexadecilab/TwitchProfiler/blob/main/images/website_userpage.png?raw=true)
 The user page is composed of 7 panels:
  - Show the name of the user and the last date where the data were analyzed.
  - Show the recent favorite streamers.
