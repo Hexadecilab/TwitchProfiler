@@ -5,7 +5,7 @@
 This document is created to summarize my work on my project Twitch profiler. I worked on this project for more than 2 months (at the moment as I write this document) but the information gathering pipeline is fully automated and will so continue to work passively.
 In this paper, I will describe how I successfully tracked more than 5.6M french viewer on the [Twitch platform](https://www.twitch.tv/). To do so, I developed some automated procedure for verifying and expending my database.
 At the moment of writing this document, 5.6M user are tracked, with an average of 900K different user daily tracked.
-It is possible for you to use [this website](https://profiler.hexadecilab.com) to view the state of my database and anonymized information about random user (username: **visitor** | password: **visitorpassword**).
+It is possible for you to use [this website](https://profiler.hexadecilab.com) to view the state of my database and anonymized information about random user (username: **visitor** | password: **visitorpassword**). For more info about the website, please refer to the __Website__ section of this document.
 For evident legal and ethical reason, this database will not be used for any commercial product or service.
 ## Motivation
 This project has started when I found an URL provided by Twitch *(not officially)* which allow getting the pseudonym of people connected to the [IRC chat](https://fr.wikipedia.org/wiki/Internet_Relay_Chat) of the polled streamer.
